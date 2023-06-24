@@ -11,6 +11,85 @@
 using namespace std;
 //using namespace sf;
 
+//Ball Class
+
+class Ball {
+private:
+	float moveSpeedX;
+	float moveSpeedY;
+	sf::CircleShape ball;
+
+public:
+
+	void createBall(float moveSpeedX, float moveSpeedY) {
+		cout << "ayaya" << endl;
+		ball.move(moveSpeedX, moveSpeedY);
+		
+	}
+
+	virtual ~Ball();
+
+
+
+	void printBall(sf::RenderWindow* win) {
+		win->draw(this->ball);
+	}
+
+	Ball() {
+		cout << "ayaya again" << endl;
+		this->ball.setFillColor(sf::Color::Green);
+		this->ball.setRadius(50);
+		this->ball.setOutlineColor(sf::Color::Black);
+		this->ball.setOutlineThickness(-3);
+		this->ball.setPosition(625.f, 500.f);
+
+		if (rand() % 10 >= 5) {
+			this->moveSpeedX = 3.f;
+			this->moveSpeedY = 3.f;
+			cout << "ayaya radn" << endl;
+		}
+		else
+		{
+			this->moveSpeedX = 3.f;
+			this->moveSpeedY = 3.f;
+			cout << "ayaya rand" << endl;
+		}
+		this->createBall(moveSpeedX, moveSpeedY);
+	}
+
+
+	bool checkIfScored() {
+		ball.move(moveSpeedX, moveSpeedY);
+		if (this->ball.getGlobalBounds().left < 45.f) {
+			this->ball.setFillColor(sf::Color::White);
+			return false;
+		}
+		else if (this->ball.getGlobalBounds().left + this->ball.getGlobalBounds().width > 1355.f) {
+			this->ball.setFillColor(sf::Color::White);
+			return false;
+		}
+		else return true;
+	}
+
+
+	void checkCollisionBall() {
+
+		if (this->ball.getGlobalBounds().top <= 250.f) {
+				this->ball.setFillColor(sf::Color::Red);
+				this->createBall(moveSpeedX, -moveSpeedY);
+		}
+		else if (this->ball.getGlobalBounds().top + this->ball.getGlobalBounds().height >= 900.f) {
+			this->ball.setFillColor(sf::Color::Blue);
+			this->createBall(-10.f, -10.f);
+		}
+	}
+
+
+};
+
+
+
+
 //Player Class
 
 class Player {
@@ -35,7 +114,7 @@ public:
 		win->draw(this->p);
 	}
 
-	//Movement iput with collision check
+	//Movement input with collision check
 	void checkInput1() {
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
 			if (this->p.getGlobalBounds().top > 260.f) {
@@ -61,6 +140,8 @@ public:
 			}
 		}
 	}
+
+	
 
 };
 
@@ -144,6 +225,8 @@ public:
 
 };
 
+
+
 //////////////
 
 //Game Class
@@ -158,6 +241,7 @@ private:
 	sf::Event eve;
 	Player1 player1;
 	Player2 player2;
+	Ball ball;
 
 	//Objects of the game
 	WallsAndGates wallsAndGates;
@@ -207,17 +291,25 @@ public:
 		//test printing player
 		this->player1.printPlayer(this->window);
 		this->player2.printPlayer(this->window);
+		if (ball.checkIfScored()) {
+			this->ball.printBall(this->window);
+		}
+		
 
 		this->window->display();
 	}
 
 	//Updating Game
 	void gameUpdate() {
-		this->getKeboardInp();
+		this->ball.checkIfScored();
 
+		this->ball.checkCollisionBall();
+
+		this->getKeboardInp();
 		//checking input for each player
 		this->player1.checkInput1();
 		this->player2.checkInput2();
+		
 	}
 
 	//To close window with input
@@ -263,4 +355,8 @@ int main() {
 
 	}
 
+}
+
+Ball::~Ball()
+{
 }
