@@ -24,7 +24,7 @@ public:
 	void createBall(float moveSpeedX, float moveSpeedY) {
 		cout << "ayaya" << endl;
 		ball.move(moveSpeedX, moveSpeedY);
-		
+
 	}
 
 	virtual ~Ball();
@@ -75,8 +75,8 @@ public:
 	void checkCollisionBall() {
 
 		if (this->ball.getGlobalBounds().top <= 250.f) {
-				this->ball.setFillColor(sf::Color::Red);
-				this->createBall(moveSpeedX, -moveSpeedY);
+			this->ball.setFillColor(sf::Color::Red);
+			this->createBall(moveSpeedX, -moveSpeedY);
 		}
 		else if (this->ball.getGlobalBounds().top + this->ball.getGlobalBounds().height >= 900.f) {
 			this->ball.setFillColor(sf::Color::Blue);
@@ -141,7 +141,9 @@ public:
 		}
 	}
 
-	
+	auto getPlayer() {
+		return this->p.getGlobalBounds();
+	}
 
 };
 
@@ -294,7 +296,7 @@ public:
 		if (ball.checkIfScored()) {
 			this->ball.printBall(this->window);
 		}
-		
+
 
 		this->window->display();
 	}
@@ -309,7 +311,7 @@ public:
 		//checking input for each player
 		this->player1.checkInput1();
 		this->player2.checkInput2();
-		
+
 	}
 
 	//To close window with input
