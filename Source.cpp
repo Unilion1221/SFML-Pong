@@ -11,81 +11,9 @@
 using namespace std;
 //using namespace sf;
 
-//Ball Class
-
-class Ball {
-private:
-	float moveSpeedX;
-	float moveSpeedY;
-	sf::CircleShape ball;
-
-public:
-
-	void createBall(float moveSpeedX, float moveSpeedY) {
-		cout << "ayaya" << endl;
-		ball.move(moveSpeedX, moveSpeedY);
-
-	}
-
-	virtual ~Ball();
 
 
 
-	void printBall(sf::RenderWindow* win) {
-		win->draw(this->ball);
-	}
-
-	Ball() {
-		cout << "ayaya again" << endl;
-		this->ball.setFillColor(sf::Color::Green);
-		this->ball.setRadius(50);
-		this->ball.setOutlineColor(sf::Color::Black);
-		this->ball.setOutlineThickness(-3);
-		this->ball.setPosition(625.f, 500.f);
-
-		if (rand() % 10 >= 5) {
-			this->moveSpeedX = 3.f;
-			this->moveSpeedY = 3.f;
-			cout << "ayaya radn" << endl;
-		}
-		else
-		{
-			this->moveSpeedX = 3.f;
-			this->moveSpeedY = 3.f;
-			cout << "ayaya rand" << endl;
-		}
-		this->createBall(moveSpeedX, moveSpeedY);
-	}
-
-
-	bool checkIfScored() {
-		ball.move(moveSpeedX, moveSpeedY);
-		if (this->ball.getGlobalBounds().left < 45.f) {
-			this->ball.setFillColor(sf::Color::White);
-			return false;
-		}
-		else if (this->ball.getGlobalBounds().left + this->ball.getGlobalBounds().width > 1355.f) {
-			this->ball.setFillColor(sf::Color::White);
-			return false;
-		}
-		else return true;
-	}
-
-
-	void checkCollisionBall() {
-
-		if (this->ball.getGlobalBounds().top <= 250.f) {
-			this->ball.setFillColor(sf::Color::Red);
-			this->createBall(moveSpeedX, -moveSpeedY);
-		}
-		else if (this->ball.getGlobalBounds().top + this->ball.getGlobalBounds().height >= 900.f) {
-			this->ball.setFillColor(sf::Color::Blue);
-			this->createBall(-10.f, -10.f);
-		}
-	}
-
-
-};
 
 
 
@@ -145,7 +73,94 @@ public:
 		return this->p.getGlobalBounds();
 	}
 
+	
+
 };
+
+
+
+//Ball Class
+class Ball {
+private:
+	float moveSpeedX;
+	float moveSpeedY;
+	sf::CircleShape ball;
+	Player player;
+
+public:
+
+	void createBall(float moveSpeedX, float moveSpeedY) {
+		ball.move(moveSpeedX, moveSpeedY);
+
+	}
+
+	virtual ~Ball();
+
+
+
+	void printBall(sf::RenderWindow* win) {
+		win->draw(this->ball);
+	}
+
+	Ball() {
+		cout << "ayaya again" << endl;
+		this->ball.setFillColor(sf::Color::Green);
+		this->ball.setRadius(50);
+		this->ball.setOutlineColor(sf::Color::Black);
+		this->ball.setOutlineThickness(-3);
+		this->ball.setPosition(625.f, 500.f);
+
+		if (rand() % 10 >= 5) {
+			this->moveSpeedX = 3.f;
+			this->moveSpeedY = 3.f;
+			cout << "ayaya radn" << endl;
+		}
+		else
+		{
+			this->moveSpeedX = 2.f;
+			this->moveSpeedY = -2.f;
+			cout << "ayaya rand" << endl;
+		}
+		this->createBall(moveSpeedX, moveSpeedY);
+	}
+
+	//this checks if the ball went into either the right or the left goal
+	bool checkIfScored() {
+		ball.move(moveSpeedX, moveSpeedY);
+		if (this->ball.getGlobalBounds().left < 45.f) {
+			this->ball.setFillColor(sf::Color::White);
+			return false;
+		}
+		else if (this->ball.getGlobalBounds().left + this->ball.getGlobalBounds().width > 1355.f) {
+			this->ball.setFillColor(sf::Color::White);
+			return false;
+		}
+		else return true;
+	}
+
+	//this checks if ball collided with the upper or lower wall, or a player
+	void checkCollisionBall() {
+
+
+		if (this->ball.getGlobalBounds().top <= 250.f) {
+			this->ball.setFillColor(sf::Color::Red);
+			ball.move(moveSpeedX *= 1, moveSpeedY *= -1);
+		}
+		else if (this->ball.getGlobalBounds().top + this->ball.getGlobalBounds().height >= 850.f) {
+			this->ball.setFillColor(sf::Color::Blue);
+			ball.move(moveSpeedX *= 1, moveSpeedY *= -1);
+		}
+		//else if (this->ball.getGlobalBounds().left > player.getPlayer().left) {
+		//	this->ball.setFillColor(sf::Color::Blue);
+		//	ball.move(moveSpeedX *= 1, moveSpeedY *= -1);
+		//}
+	}
+
+
+};
+
+
+
 
 //////////////
 
@@ -293,10 +308,9 @@ public:
 		//test printing player
 		this->player1.printPlayer(this->window);
 		this->player2.printPlayer(this->window);
-		if (ball.checkIfScored()) {
-			this->ball.printBall(this->window);
-		}
 
+		this->ball.printBall(this->window);
+		
 
 		this->window->display();
 	}
@@ -311,7 +325,7 @@ public:
 		//checking input for each player
 		this->player1.checkInput1();
 		this->player2.checkInput2();
-
+		
 	}
 
 	//To close window with input
@@ -346,6 +360,8 @@ public:
 int main() {
 
 	Game game;
+
+	
 
 	while (game.gameRunState())
 	{
