@@ -125,17 +125,16 @@ public:
 	}
 
 	//this checks if the ball went into either the right or the left goal
-	bool checkIfScored() {
+	int checkIfScored() {
 		ball.move(moveSpeedX, moveSpeedY);
 		if (this->ball.getGlobalBounds().left < 45.f) {
 			this->ball.setFillColor(sf::Color::White);
-			return false;
+			return 1;
 		}
 		else if (this->ball.getGlobalBounds().left + this->ball.getGlobalBounds().width > 1355.f) {
 			this->ball.setFillColor(sf::Color::White);
-			return false;
+			return 2;
 		}
-		else return true;
 	}
 
 	//this checks if ball collided with the upper or lower wall, or a player
