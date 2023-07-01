@@ -73,9 +73,73 @@ public:
 		return this->p.getGlobalBounds();
 	}
 
+	auto getpostplayer() {
+		return this->p.getPosition();
+	}
+
 	
 
 };
+
+
+
+
+
+
+
+
+//////////////
+//////////////
+
+//Player1 class
+
+class Player1 : public Player {
+private:
+	float posX, posY;
+	sf::Color color;
+
+public:
+	void createPlayer1() {
+		this->posX = 100.f;
+		this->posY = 480.f;
+		this->color = sf::Color::Blue;
+		createPlayer(posX, posY, color);
+	}
+
+	Player1() {
+		this->createPlayer1();
+	}
+};
+
+
+//////////////
+
+//Player2 class
+
+class Player2 : public Player {
+private:
+	float posX, posY;
+	sf::Color color;
+
+public:
+	void createPlayer2() {
+		this->posX = 1280.f;
+		this->posY = 480.f;
+		this->color = sf::Color::Red;
+		createPlayer(posX, posY, color);
+	}
+
+	Player2() {
+		this->createPlayer2();
+	}
+};
+
+
+
+
+
+//////////////////////
+//////////////////////
 
 
 
@@ -85,7 +149,8 @@ private:
 	float moveSpeedX;
 	float moveSpeedY;
 	sf::CircleShape ball;
-	Player player;
+	Player1 p1;
+	Player2 p2;
 
 public:
 
@@ -111,14 +176,14 @@ public:
 		this->ball.setPosition(625.f, 500.f);
 
 		if (rand() % 10 >= 5) {
-			this->moveSpeedX = 3.f;
-			this->moveSpeedY = 3.f;
+			this->moveSpeedX = 4.f;
+			this->moveSpeedY = 4.f;
 			cout << "ayaya radn" << endl;
 		}
 		else
 		{
-			this->moveSpeedX = 2.f;
-			this->moveSpeedY = -2.f;
+			this->moveSpeedX = -4.f;
+			this->moveSpeedY = 0.f;
 			cout << "ayaya rand" << endl;
 		}
 		this->createBall(moveSpeedX, moveSpeedY);
@@ -142,70 +207,43 @@ public:
 
 
 		if (this->ball.getGlobalBounds().top <= 250.f) {
-			this->ball.setFillColor(sf::Color::Red);
+			this->ball.setFillColor(sf::Color::Magenta);
 			ball.move(moveSpeedX *= 1, moveSpeedY *= -1);
 		}
 		else if (this->ball.getGlobalBounds().top + this->ball.getGlobalBounds().height >= 850.f) {
 			this->ball.setFillColor(sf::Color::Blue);
 			ball.move(moveSpeedX *= 1, moveSpeedY *= -1);
 		}
-		//else if (this->ball.getGlobalBounds().left > player.getPlayer().left) {
-		//	this->ball.setFillColor(sf::Color::Blue);
-		//	ball.move(moveSpeedX *= 1, moveSpeedY *= -1);
+
+		if (this->ball.getPosition().x <= p1.getPlayer().left + p1.getPlayer().width && (this->ball.getPosition().y >= p1.getPlayer().top && this->ball.getPosition().y <= p1.getPlayer().top + p1.getPlayer().height)) {
+			this->ball.setFillColor(sf::Color::Red);
+			ball.move(moveSpeedX *= -1, moveSpeedY *= 1);
+		}
+		cout << ball.getPosition().x << endl;
+
+
+		/*if (this->ball.getPosition().x <= p1.getPlayer().left + p1.getPlayer().width && (this->ball.getPosition().y >= p1.getPlayer().top) && this->ball.getPosition().y <= p1.getPlayer().top - p1.getPlayer().height) {
+			this->ball.setFillColor(sf::Color::Red);
+			ball.move(moveSpeedX *= -1, moveSpeedY *= 1);   && (this->ball.getPosition().y <= p1.getPlayer().top && this->ball.getPosition().y >= p1.getPlayer().top)
+		}*/
+		//if (this->ball.getPosition().x + this->ball.getGlobalBounds().width >= p2.getPlayer().left && this->ball.getPosition().y + this->ball.getGlobalBounds().height >= p2.getPlayer().top) {
+		//	this->ball.setFillColor(sf::Color::Red);
+		//	ball.move(moveSpeedX *= -1, moveSpeedY *= 1);
 		//}
 	}
 
-
 };
+
+
+
+
 
 
 
 
 //////////////
 
-//Player1 class
 
-class Player1 : public Player {
-private:
-	float posX, posY;
-	sf::Color color;
-
-public:
-	void createPlayer1() {
-		this->posX = 100.f;
-		this->posY = 480.f;
-		this->color = sf::Color::Blue;
-		createPlayer(posX, posY, color);
-	}
-
-	Player1() {
-		this->createPlayer1();
-	}
-};
-
-//////////////
-
-//Player2 class
-
-class Player2 : public Player {
-private:
-	float posX, posY;
-	sf::Color color;
-
-public:
-	void createPlayer2() {
-		this->posX = 1280.f;
-		this->posY = 480.f;
-		this->color = sf::Color::Red;
-		createPlayer(posX, posY, color);
-	}
-
-	Player2() {
-		this->createPlayer2();
-	}
-};
-
-//////////////
 
 //Class WallsAndGates
 class WallsAndGates {
@@ -316,14 +354,16 @@ public:
 
 	//Updating Game
 	void gameUpdate() {
-		this->ball.checkIfScored();
-
-		this->ball.checkCollisionBall();
+		
 
 		this->getKeboardInp();
 		//checking input for each player
 		this->player1.checkInput1();
 		this->player2.checkInput2();
+
+		this->ball.checkIfScored();
+
+		this->ball.checkCollisionBall();
 		
 	}
 
