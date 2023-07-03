@@ -97,7 +97,6 @@ public:
 	}
 
 	Ball() {
-		cout << "ayaya again" << endl;
 		this->ball.setFillColor(sf::Color::White);
 		this->ball.setRadius(26);
 		this->ball.setOutlineColor(sf::Color::White);
@@ -105,17 +104,19 @@ public:
 		//this->ball.setPosition(687.f, 513.f);
 		this->ball.setPosition(625.f, 590.f);
 
-		if (rand() % 10 >= 5) {
-			this->moveSpeedX = 5.f;
-			this->moveSpeedY = 5.f;
-			cout << "ayaya radn" << endl;
-		}
-		else
-		{
-			this->moveSpeedX = 5.f;
-			this->moveSpeedY = 5.f; //was 2
-			cout << "ayaya rand" << endl;
-		}
+		moveSpeedY = rand() % 7;
+		moveSpeedX = (rand() % 5)+4;
+		//if (rand() % 10 >= 5) {
+		//	this->moveSpeedX = 5.f;
+		//	this->moveSpeedY = 5.f;
+		//	cout << "ayaya radn" << endl;
+		//}
+		//else
+		//{
+		//	this->moveSpeedX = 5.f;
+		//	this->moveSpeedY = 5.f; //was 2
+		//	cout << "ayaya rand" << endl;
+		//}
 		this->createBall(moveSpeedX, moveSpeedY);
 	}
 
@@ -126,16 +127,16 @@ public:
 			this->ball.setFillColor(sf::Color::White);
 			//this->ball.setPosition(687.f, 513.f);
 			this->ball.setPosition(625.f, 590.f);
-			this->moveSpeedX = 5.f;
-			this->moveSpeedY = 5.f; //was 2
+			this->moveSpeedY = -1 * (rand() % 7);
+			this->moveSpeedX = -1 * ((rand() % 5)+4);//was 2
 			return 2;
 		}
 		if (this->ball.getPosition().x < 20.f) {
-			cout << this->ball.getPosition().x << endl;
+			//cout << this->ball.getPosition().x << "this" << endl;
 			this->ball.setFillColor(sf::Color::White);
 			this->ball.setPosition(625.f, 590.f);
-			this->moveSpeedX = 5.f;
-			this->moveSpeedY = 5.f; //was 2
+			this->moveSpeedY = (rand() % 7);
+			this->moveSpeedX = (rand() % 5) + 4;//was 2
 			return 1;
 		}
 	}
@@ -147,22 +148,16 @@ public:
 			this->ball.setFillColor(sf::Color::Magenta);
 			ball.move(moveSpeedX *= 1, moveSpeedY *= -1);
 		}
+
 		else if (this->ball.getGlobalBounds().top + this->ball.getGlobalBounds().height >= 850.f) {
 			this->ball.setFillColor(sf::Color::Magenta);
 			ball.move(moveSpeedX *= 1, moveSpeedY *= -1);
 		}
-		
-		if (this->ball.getPosition().x - abs(this->moveSpeedX) == leftl + widthl && (this->ball.getPosition().y >= topl && this->ball.getPosition().y <= topl + heightl) ||
-			(this->ball.getPosition().x - abs(this->moveSpeedX) == leftl + widthl && (this->ball.getPosition().y + this->ball.getGlobalBounds().height >= topl && this->ball.getPosition().y + this->ball.getGlobalBounds().height <= topl + heightl))) {
-			this->ball.setFillColor(sf::Color::Red);
-			ball.move(moveSpeedX *= -1, moveSpeedY *= 1);
-		}
 
-		if (this->ball.getPosition().x + 40.f + (10 + this->moveSpeedX) == leftr && (this->ball.getPosition().y >= topr && this->ball.getPosition().y <= topr + heightr) ||
-			(this->ball.getPosition().x + 40.f + (10 + this->moveSpeedX) == leftr && (this->ball.getPosition().y + this->ball.getGlobalBounds().height >= topr&& this->ball.getPosition().y + this->ball.getGlobalBounds().height <= topr + heightr))) {
-			this->ball.setFillColor(sf::Color::Blue);
-			ball.move(moveSpeedX *= -1, moveSpeedY *= 1);
-		}
+
+
+
+
 
 		//cout << abs(this->moveSpeedX) << endl;
 
@@ -177,6 +172,91 @@ public:
 
 		//red player
 
+	}
+
+
+
+
+	void checkCollisionBallPlayer(float topl, float heightl, float leftl, float widthl, float topr, float heightr, float leftr, float widthr, int p1speed, int p2speed) {
+
+		//blue
+		if (this->ball.getPosition().x <= leftl + widthl && (this->ball.getPosition().y >= topl && this->ball.getPosition().y <= topl + heightl)) {
+			this->ball.setFillColor(sf::Color::Red);
+			if (p1speed == 15) {
+				moveSpeedY += 8;
+			}
+			if (p1speed == 15) {
+				moveSpeedY += -8;
+			}
+			ball.move(moveSpeedX *= -1, moveSpeedY *= 1);
+		}
+
+		//reverse if of this->ball.getPosition().y + this->ball.getGlobalBounds().height
+		
+		//blue
+		else if (this->ball.getPosition().x <= leftl + widthl && (this->ball.getPosition().y + this->ball.getGlobalBounds().height >= topl && this->ball.getPosition().y + this->ball.getGlobalBounds().height <= topl + heightl)) {
+			this->ball.setFillColor(sf::Color::White);
+			if (p1speed == 15) {
+				moveSpeedY += 8;
+			}
+			if (p1speed == 15) {
+				moveSpeedY += -8;
+			}
+			ball.move(moveSpeedX *= -1, moveSpeedY *= 1);
+		}
+
+		//red
+		if (this->ball.getPosition().x + this->ball.getGlobalBounds().width >= leftr && (this->ball.getPosition().y >= topr && this->ball.getPosition().y <= topr + heightr)) {
+			this->ball.setFillColor(sf::Color::Blue);
+			ball.move(moveSpeedX *= -1, moveSpeedY *= 1);
+			if (p2speed == 15) {
+				moveSpeedY += 8;
+			}
+			if (p2speed == 15) {
+				moveSpeedY += -8;
+			}
+		}
+
+		//reverse if of this->ball.getPosition().y + this->ball.getGlobalBounds().height
+		
+		//red
+		else if (this->ball.getPosition().x + this->ball.getGlobalBounds().width >= leftr && (this->ball.getPosition().y + this->ball.getGlobalBounds().height >= topr && this->ball.getPosition().y + this->ball.getGlobalBounds().height <= topr + heightr)) {
+			this->ball.setFillColor(sf::Color::Cyan);
+			if (p2speed == 15) {
+				moveSpeedY += 8;
+			}
+			if (p2speed == 15) {
+				moveSpeedY += -8;
+			}
+			ball.move(moveSpeedX *= -1, moveSpeedY *= 1);
+		}
+
+
+		//blue
+		if (this->ball.getPosition().x - abs(this->moveSpeedX) == leftl + widthl && (this->ball.getPosition().y >= topl && this->ball.getPosition().y <= topl + heightl) ||
+			(this->ball.getPosition().x - abs(this->moveSpeedX) == leftl + widthl && (this->ball.getPosition().y + this->ball.getGlobalBounds().height >= topl && this->ball.getPosition().y + this->ball.getGlobalBounds().height <= topl + heightl))) {
+			this->ball.setFillColor(sf::Color::Red);
+			if (p1speed == 15) {
+				moveSpeedY += 8;
+			}
+			if (p1speed == 15) {
+				moveSpeedY += -8;
+			}
+			ball.move(moveSpeedX *= -1, moveSpeedY *= 1);
+		}
+
+		//red
+		if (this->ball.getPosition().x + 40.f + (10 + this->moveSpeedX) == leftr && (this->ball.getPosition().y >= topr && this->ball.getPosition().y <= topr + heightr) ||
+			(this->ball.getPosition().x + 40.f + (10 + this->moveSpeedX) == leftr && (this->ball.getPosition().y + this->ball.getGlobalBounds().height >= topr && this->ball.getPosition().y + this->ball.getGlobalBounds().height <= topr + heightr))) {
+			this->ball.setFillColor(sf::Color::Blue);
+			if (p2speed == 15) {
+				moveSpeedY += 8;
+			}
+			if (p2speed == 15) {
+				moveSpeedY += -8;
+			}
+			ball.move(moveSpeedX *= -1, moveSpeedY *= 1);
+		}
 	}
 
 
@@ -394,21 +474,38 @@ private:
 		this->window->draw(winText);
 	}
 
-	void player1Speed() {
+	int player1Speed() {
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
 			cout << -15 << endl;
+			return -15;
 		}
 		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
 			cout << 15 << endl;
+			return 15;
 		}
 		else {
 			cout << 0 << endl;
+			return 0;
 		}
+		return 0;
+	}
+
+	int player2Speed() {
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
+			cout << -15 << endl;
+			return -15;
+		}
+		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
+			cout << 15 << endl;
+			return 15;
+		}
+		else {
+			cout << 0 << endl;
+			return 0;
+		}
+		return 0;
 	}
 	
-	/*void player1Speed() {
-
-	}*/
 
 public:
 
@@ -474,11 +571,15 @@ public:
 	void gameUpdate() {
 		this->getKeboardInp();
 		this->player1Speed();
+		this->player2Speed();
 		/*this->ball.checkIfScored();*/
 
 		//checking input for each player
 		this->player1.checkInput1();
 		this->player2.checkInput2();
+
+		this->ball.checkCollisionBallPlayer(this->player1.getPlayer().top, this->player1.getPlayer().height, this->player1.getPlayer().left, this->player1.getPlayer().width,
+			this->player2.getPlayer().top, this->player2.getPlayer().height, this->player2.getPlayer().left, this->player2.getPlayer().width,this->player1Speed(), this->player2Speed());
 
 		this->ball.checkCollisionBall(this->player1.getPlayer().top, this->player1.getPlayer().height, this->player1.getPlayer().left, this->player1.getPlayer().width, 
 			this->player2.getPlayer().top, this->player2.getPlayer().height, this->player2.getPlayer().left, this->player2.getPlayer().width);
