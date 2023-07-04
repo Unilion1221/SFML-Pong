@@ -13,7 +13,7 @@ using namespace std;
 //using namespace sf;
 
 
-#define RA(min,max)	( (min) + rand() % ( (max) - (min) + 1) )
+#define RA(min,max)	( (min) + rand() % ( (max) - (min) + 1) )//Taken from the final exam for OOP (was going to make it myself but since it was already made i used it)
 
 //Player Class
 
