@@ -540,11 +540,6 @@ private:
 
 public:
 
-	//test func
-	WallsAndGates getBoard() {
-		return wallsAndGates;
-	}
-
 	//Constructor and Destructor
 	Game() {
 		this->initializeVars();
@@ -598,8 +593,6 @@ public:
 	//Updating Game
 	void gameUpdate() {
 		this->getKeboardInp();
-		this->player1Speed();
-		this->player2Speed();
 
 		//checking input for each player
 		this->player1.checkInput();
@@ -645,7 +638,7 @@ int main() {
 		//Updating the game
 		game.gameUpdate();
 
-		//Rendering the game
+		//Rendering the game 
 		game.gameRender(); 
 
 	}
