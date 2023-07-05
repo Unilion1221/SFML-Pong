@@ -646,7 +646,7 @@ int main() {
 		game.gameUpdate();
 
 		//Rendering the game
-		game.gameRender();
+		game.gameRender(); 
 
 	}
 
